@@ -1,4 +1,6 @@
-﻿namespace Lawnscapers.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Lawnscapers.Models
 {
     public class Puzzle
     {
@@ -13,17 +15,22 @@
         public bool IsPublic { get; set; } = false;
 
 
-        public Puzzle(Guid id, string name, Player creator, int width, int height, Position playerStartPosition, List<Position> obstaclePositions, DateTime createdAt)
+        public Puzzle(Guid id, string name, Player creator, int width, int height, Position playerStartPosition, List<Obstacle> obstacles, DateTime createdAt)
         {
+            // Validate name is not null or empty
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException("Name cannot be null or empty");
+            }
+
             Id = id;
             Name = name;
             Creator = creator;
             Width = width;
             Height = height;
             PlayerStartPosition = playerStartPosition;
-            Obstacles = obstaclePositions;
+            Obstacles = obstacles;
             CreatedAt = createdAt;
         }
     }
-
 }

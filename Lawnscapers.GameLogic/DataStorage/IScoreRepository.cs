@@ -2,10 +2,8 @@
 
 namespace Lawnscapers.GameLogic.DataStorage
 {
-    public interface IScoreRepository
+    public interface IScoreRepository : IRepository<ScoreEntry>
     {
-        Task<IDictionary<string, IEnumerable<ScoreEntry>>> Get();
-        Task<IEnumerable<ScoreEntry>> Get(string puzzleId);
-        Task Submit(ScoreEntry scoreEntry);
+
     }
 }

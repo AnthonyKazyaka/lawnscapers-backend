@@ -23,7 +23,7 @@ namespace Lawnscapers.GameLogic.DataStorage
 
         public async Task SavePuzzle(Puzzle puzzleData)
         {
-            await _puzzleDatabaseService.SubmitData(puzzleData.Id.ToString(), puzzleData);
+            await _puzzleDatabaseService.SubmitData("submittedPuzzles", puzzleData.Id.ToString(), puzzleData);
         }
     }
 }

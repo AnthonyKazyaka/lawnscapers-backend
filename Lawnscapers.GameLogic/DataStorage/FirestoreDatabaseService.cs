@@ -4,35 +4,29 @@ namespace Lawnscapers.GameLogic.DataStorage
 {
     public class FirestoreDatabaseService<T> : IDatabaseService<T>
     {
-        protected readonly FirestoreDb _db;
-        protected string _collectionName = "";
+        private readonly FirestoreDb _db;
 
-        public FirestoreDatabaseService()
+        public FirestoreDatabaseService(string projectId)
         {
-            // Initialize _db. You'd typically have your Firestore settings/connection logic here.
-            _db = FirestoreDb.Create("your-project-id");
+            _db = FirestoreDb.Create(projectId);
         }
 
         public async Task<IEnumerable<T>> GetData(string collectionName)
         {
-            return await GetDataFromCollection(collectionName);
-        }
-
-        protected virtual async Task<IEnumerable<T>> GetDataFromCollection(string collectionName)
-        {
             var querySnapshot = await _db.Collection(collectionName).GetSnapshotAsync();
-            List<T> items = new ();
-            foreach (var document in querySnapshot.Documents)
-            {
-                items.Add(document.ConvertTo<T>());
-            }
-            return items;
+            return querySnapshot.Documents.Select(doc => doc.ConvertTo<T>());
         }
 
-        public async Task SubmitData(string key, T data)
+        public async Task SubmitData(string collectionName, string key, T data)
         {
-            DocumentReference docRef = _db.Collection(_collectionName).Document(key);
+            var docRef = _db.Collection(collectionName).Document(key);
             await docRef.SetAsync(data);
+        }
+
+        public async Task DeleteData(string collectionName, string key)
+        {
+            var docRef = _db.Collection(collectionName).Document(key);
+            await docRef.DeleteAsync();
         }
     }
 }

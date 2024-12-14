@@ -11,12 +11,12 @@ namespace Lawnscapers.GameLogic.DataStorage.Models
         public int Score { get; set; }
 
         [FirestoreProperty]
-        public string PuzzleId { get; set; }
+        public Guid PuzzleId { get; set; }
 
         [FirestoreProperty]
         public string Timestamp { get; set; }
 
-        public ScoreEntry(string playerName, int score, string puzzleId, string timestamp)
+        public ScoreEntry(string playerName, int score, Guid puzzleId, string timestamp)
         {
             PlayerName = playerName;
             Score = score;
@@ -26,7 +26,7 @@ namespace Lawnscapers.GameLogic.DataStorage.Models
 
         public ScoreEntry(Lawnscapers.Models.ScoreEntry scoreEntry)
         {
-            PlayerName = scoreEntry.PlayerName;
+            PlayerName = scoreEntry.Player.Name;
             Score = scoreEntry.Score;
             PuzzleId = scoreEntry.PuzzleId;
             Timestamp = scoreEntry.Timestamp;

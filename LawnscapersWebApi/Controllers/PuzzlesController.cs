@@ -3,7 +3,7 @@ using Lawnscapers.GameLogic.DataStorage;
 using Lawnscapers.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Lawnscapers.WebApi.Controllers
+namespace Lawnscapers.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -19,11 +19,13 @@ namespace Lawnscapers.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IDictionary<string, IEnumerable<Puzzle>>>> GetPuzzles()
+        public async Task<ActionResult<IDictionary<string, IEnumerable<Puzzle>>>> GetPuzzles(int page = 1, int pageSize = 10)
         {
-            var officialPuzzles = await _puzzleRepository.GetOfficialPuzzlesData();
-            var communityPuzzles = await _puzzleRepository.GetSubmittedPuzzlesData();
-            
+            var officialPuzzles = (await _puzzleRepository.GetOfficialPuzzlesData())
+                                  .Skip((page - 1) * pageSize).Take(pageSize);
+            var communityPuzzles = (await _puzzleRepository.GetSubmittedPuzzlesData())
+                                   .Skip((page - 1) * pageSize).Take(pageSize);
+
             var puzzles = new Dictionary<string, IEnumerable<Puzzle>>
             {
                 { "official", officialPuzzles },
@@ -35,7 +37,7 @@ namespace Lawnscapers.WebApi.Controllers
 
         [HttpGet]
         [Route("{puzzleId}/leaderboards")]
-        public async Task<ActionResult<IEnumerable<ScoreEntry>>> GetScoresByPuzzleId(string puzzleId)
+        public async Task<ActionResult<IEnumerable<ScoreEntry>>> GetScoresByPuzzleId(Guid puzzleId)
         {
             var scores = await _leaderboardProvider.GetScoresByPuzzleId(puzzleId);
             return Ok(scores);

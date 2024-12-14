@@ -4,18 +4,17 @@ namespace Lawnscapers.Models
 {
     public class ScoreEntry
     {
-        public string PlayerName { get; set; }
+        public Player Player { get; set; }
         public int Score { get; set; }
-        public string PuzzleId { get; set; }
+        public Guid PuzzleId { get; set; }
         public string Timestamp { get; set; }
 
-        public ScoreEntry(string playerName, int score, string puzzleId, string timestamp)
+        public ScoreEntry(Player player, int score, Guid puzzleId, string timestamp)
         {
-            PlayerName = playerName;
+            Player = player;
             Score = score;
             PuzzleId = puzzleId;
             Timestamp = timestamp;
         }
     }
-
 }

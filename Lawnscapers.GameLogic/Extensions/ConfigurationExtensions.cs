@@ -11,6 +11,7 @@ namespace Lawnscapers.GameLogic.Extensions
         {
             serviceCollection.AddSingleton<ILeaderboardProvider, LeaderboardProvider>();
             serviceCollection.AddSingleton<IPuzzleRepository, PuzzleRepository>();
+            serviceCollection.AddSingleton<IScoreRepository, ScoreRepository>();
 
             return serviceCollection;
         }

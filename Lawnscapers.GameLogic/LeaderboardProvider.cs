@@ -5,41 +5,44 @@ namespace Lawnscapers.GameLogic
 {
     public class LeaderboardProvider : ILeaderboardProvider
     {
-        private readonly IScoreRepository _scoreRepository;
+        private readonly IRepository<ScoreEntry> _repository;
 
-        public LeaderboardProvider(IScoreRepository scoreRepository)
+        public LeaderboardProvider(IRepository<ScoreEntry> repository)
         {
-            _scoreRepository = scoreRepository;
+            _repository = repository;
         }
 
-        public async Task<IEnumerable<ScoreEntry>> GetScoresByPuzzleId(string puzzleId)
+        public async Task<IEnumerable<ScoreEntry>> GetScoresByPuzzleId(Guid puzzleId)
         {
-            var scores = await _scoreRepository.Get(puzzleId);
-            return scores.Select(MapToModelScoreEntry);
+            var allScores = await _repository.GetAllAsync();
+            if (allScores == null)
+            {
+                return Enumerable.Empty<ScoreEntry>();
+            }
+
+            return allScores
+                .Where(score => score.PuzzleId == puzzleId)
+                .OrderBy(score => score.Score); // Lower is better
         }
 
-        public async Task<IEnumerable<ScoreEntry>> GetScoresByUserId(string userId)
+
+        public async Task<IEnumerable<ScoreEntry>> GetScoresByPlayerId(Guid userId)
         {
-            var allScores = await _scoreRepository.Get();
-            return allScores.Values.SelectMany(scores => scores)
-                .Where(score => score.PlayerName == userId)
-                .Select(MapToModelScoreEntry);
+            var allScores = await _repository.GetAllAsync();
+            return allScores
+                .Where(score => score.Player.Id == userId)
+                .OrderBy(score => score.Score);
         }
 
         public async Task SubmitScore(ScoreEntry scoreEntry)
         {
-            var score = MapToDataStorageScoreEntry(scoreEntry);
-            await _scoreRepository.Submit(score);
-        }
+            var existingScores = await GetScoresByPuzzleId(scoreEntry.PuzzleId);
+            var playerBestScore = existingScores.FirstOrDefault(s => s.Player.Id == scoreEntry.Player.Id);
 
-        private static ScoreEntry MapToModelScoreEntry(DataStorage.Models.ScoreEntry score)
-        {
-            return new ScoreEntry(score.PlayerName, score.Score, score.PuzzleId, score.Timestamp);
-        }
-
-        private static DataStorage.Models.ScoreEntry MapToDataStorageScoreEntry(ScoreEntry scoreEntry)
-        {
-            return new DataStorage.Models.ScoreEntry(scoreEntry);
+            if (playerBestScore == null || scoreEntry.Score < playerBestScore.Score)
+            {
+                await _repository.AddAsync(scoreEntry);
+            }
         }
     }
 }
