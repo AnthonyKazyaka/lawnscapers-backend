@@ -1,4 +1,5 @@
-﻿using Lawnscapers.GameLogic.DataStorage;
+﻿using Lawnscapers.GameLogic;
+using Lawnscapers.GameLogic.DataStorage;
 using Lawnscapers.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace Lawnscapers.WebApi.Controllers
     public class PuzzlesController : ControllerBase
     {
         private readonly IPuzzleRepository _puzzleRepository;
+        private readonly ILeaderboardProvider _leaderboardProvider;
 
-        public PuzzlesController(IPuzzleRepository puzzleRepository)
+        public PuzzlesController(IPuzzleRepository puzzleRepository, ILeaderboardProvider leaderboardProvider)
         {
             _puzzleRepository = puzzleRepository;
+            _leaderboardProvider = leaderboardProvider;
         }
 
         [HttpGet]
@@ -29,6 +32,15 @@ namespace Lawnscapers.WebApi.Controllers
 
             return Ok(puzzles);
         }
+
+        [HttpGet]
+        [Route("{puzzleId}/leaderboards")]
+        public async Task<ActionResult<IEnumerable<ScoreEntry>>> GetScoresByPuzzleId(string puzzleId)
+        {
+            var scores = await _leaderboardProvider.GetScoresByPuzzleId(puzzleId);
+            return Ok(scores);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> CreatePuzzle(Puzzle puzzle)

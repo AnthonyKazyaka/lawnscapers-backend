@@ -15,12 +15,14 @@ namespace Lawnscapers.Api.Controllers
             _leaderboardProvider = leaderboardProvider;
         }
 
-        [HttpGet("{puzzleId}")]
+        [HttpGet("/puzzles/{puzzleId}")]
         public async Task<ActionResult<IEnumerable<ScoreEntry>>> GetScores(string puzzleId)
         {
-            var scores = await _leaderboardProvider.GetScores(puzzleId);
+            var scores = await _leaderboardProvider.GetScoresByPuzzleId(puzzleId);
             return Ok(scores);
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> SubmitScore(ScoreEntry scoreEntry)
