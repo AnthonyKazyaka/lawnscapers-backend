@@ -1,29 +1,45 @@
-﻿using Lawnscapers.Models;
+﻿using Lawnscapers.DataStorage.Firestore.Models;
 
-namespace Lawnscapers.GameLogic.DataStorage
+namespace Lawnscapers.DataStorage
 {
-    public class PuzzleRepository : IPuzzleRepository
+    public class PuzzleRepository : IRepository<Puzzle>
     {
-        private readonly IDatabaseService<Puzzle> _puzzleDatabaseService;
+        private const string AllPuzzlesCollectionKey = "puzzles";
+        private readonly IDatabaseService _db;
 
-        public PuzzleRepository(IDatabaseService<Puzzle> puzzleDatabaseService)
+        public PuzzleRepository(IDatabaseService db)
         {
-            _puzzleDatabaseService = puzzleDatabaseService;
+            _db = db;
         }
 
-        public async Task<IEnumerable<Puzzle>> GetOfficialPuzzlesData()
+        public async Task<IEnumerable<Puzzle>> GetAllAsync(string? collectionName = null)
         {
-            return await _puzzleDatabaseService.GetData("officialPuzzles");
+            collectionName ??= AllPuzzlesCollectionKey;
+            return await _db.GetAllAsync<Puzzle>(collectionName);
         }
 
-        public async Task<IEnumerable<Puzzle>> GetSubmittedPuzzlesData()
+        public async Task<Puzzle> GetByIdAsync(Guid id, string? collectionName = null)
         {
-            return await _puzzleDatabaseService.GetData("submittedPuzzles");
+            collectionName ??= AllPuzzlesCollectionKey;
+            return await _db.GetAsync<Puzzle>(collectionName, id.ToString());
         }
 
-        public async Task SavePuzzle(Puzzle puzzleData)
+        public async Task AddAsync(Puzzle entity, string? collectionName = null)
         {
-            await _puzzleDatabaseService.SubmitData("submittedPuzzles", puzzleData.Id.ToString(), puzzleData);
+            collectionName ??= AllPuzzlesCollectionKey;
+            //await _db.SubmitAsync(collectionName, entity.Id.ToString(), entity);
+        }
+
+        public async Task UpdateAsync(Puzzle entity, string? collectionName = null)
+        {
+            collectionName ??= AllPuzzlesCollectionKey;
+            //await _db.SubmitAsync(collectionName, entity.Id.ToString(), entity);
+        }
+
+        public async Task DeleteAsync(Guid id, string? collectionName = null)
+        {
+            collectionName ??= AllPuzzlesCollectionKey;
+            await _db.DeleteAsync(collectionName, id.ToString());
         }
     }
 }

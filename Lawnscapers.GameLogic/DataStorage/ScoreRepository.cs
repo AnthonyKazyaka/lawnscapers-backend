@@ -1,41 +1,41 @@
-﻿using Lawnscapers.GameLogic.DataStorage.Models;
+﻿using Lawnscapers.DataStorage.Firestore.Models;
 
-namespace Lawnscapers.GameLogic.DataStorage
+namespace Lawnscapers.DataStorage
 {
-    public class ScoreRepository : IScoreRepository
+    public class ScoreRepository : IRepository<ScoreEntry>
     {
-        private readonly IDatabaseService<ScoreEntry> _databaseService;
+        private readonly IDatabaseService _databaseService;
         private const string CollectionName = "scores";
 
-        public ScoreRepository(IDatabaseService<ScoreEntry> databaseService)
+        public ScoreRepository(IDatabaseService databaseService)
         {
             _databaseService = databaseService;
         }
 
-        public async Task<IEnumerable<ScoreEntry>> GetAllAsync()
+        public async Task<IEnumerable<ScoreEntry>> GetAllAsync(string? collectionName = null)
         {
-            return await _databaseService.GetData(CollectionName);
+            return await _databaseService.GetAllAsync<ScoreEntry>(collectionName ?? CollectionName);
         }
 
-        public async Task<ScoreEntry?> GetByIdAsync(Guid id)
+        public async Task<ScoreEntry> GetByIdAsync(Guid id, string? collectionName = null)
         {
-            var scores = await _databaseService.GetData(CollectionName);
-            return scores.FirstOrDefault(score => score.PuzzleId == id);
+            var scores = await _databaseService.GetAllAsync<ScoreEntry>(collectionName ?? CollectionName);
+            return scores.First(score => score.PuzzleId == id.ToString());
         }
 
-        public Task AddAsync(ScoreEntry entity)
+        public Task AddAsync(ScoreEntry entity, string? collectionName = null)
         {
-            return _databaseService.SubmitData(CollectionName, entity.PuzzleId.ToString(), entity);
+            return _databaseService.SubmitAsync(collectionName ?? CollectionName, entity.PuzzleId.ToString(), entity);
         }
 
-        public Task UpdateAsync(ScoreEntry entity)
+        public Task UpdateAsync(ScoreEntry entity, string? collectionName = null)
         {
-            return _databaseService.SubmitData(CollectionName, entity.PuzzleId.ToString(), entity);
+            return _databaseService.SubmitAsync(collectionName ?? CollectionName, entity.PuzzleId.ToString(), entity);
         }
 
-        public Task DeleteAsync(Guid id)
+        public Task DeleteAsync(Guid id, string? collectionName = null)
         {
-            return _databaseService.DeleteData(CollectionName, id.ToString());
+            return _databaseService.DeleteAsync(collectionName ?? CollectionName, id.ToString());
         }
     }
 }

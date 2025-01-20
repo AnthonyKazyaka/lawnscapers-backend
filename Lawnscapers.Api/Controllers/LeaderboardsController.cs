@@ -1,34 +1,47 @@
-﻿using Lawnscapers.GameLogic;
-using Lawnscapers.Models;
+﻿using Lawnscapers.Models;
+using Lawnscapers.Providers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Lawnscapers.Api.Controllers
+[ApiController]
+[Route("[controller]")]
+public class LeaderboardsController : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class LeaderboardsController : ControllerBase
+    private readonly ILeaderboardProvider _leaderboardProvider;
+
+    public LeaderboardsController(ILeaderboardProvider leaderboardProvider)
     {
-        private readonly ILeaderboardProvider _leaderboardProvider;
+        _leaderboardProvider = leaderboardProvider;
+    }
 
-        public LeaderboardsController(ILeaderboardProvider leaderboardProvider)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ScoreEntry>>> GetScores()
+    {
+        var scores = await _leaderboardProvider.GetAllScoresAsync();
+        return Ok(scores);
+    }
+
+    [HttpGet("puzzles/{puzzleId}")]
+    public async Task<ActionResult<IEnumerable<ScoreEntry>>> GetScores(Guid puzzleId)
+    {
+        var scores = await _leaderboardProvider.GetScoresByPuzzleIdAsync(puzzleId);
+        return Ok(scores);
+    }
+
+    [HttpGet("players/{playerId}")]
+    public async Task<ActionResult<IEnumerable<ScoreEntry>>> GetScoresByPlayer(Guid playerId)
+    {
+        var scores = await _leaderboardProvider.GetScoresByPlayerIdAsync(playerId);
+        if (!scores.Any())
         {
-            _leaderboardProvider = leaderboardProvider;
+            return NotFound($"No scores found for player with ID {playerId}");
         }
+        return Ok(scores);
+    }
 
-        [HttpGet("/puzzles/{puzzleId}")]
-        public async Task<ActionResult<IEnumerable<ScoreEntry>>> GetScores(string puzzleId)
-        {
-            var scores = await _leaderboardProvider.GetScoresByPuzzleId(puzzleId);
-            return Ok(scores);
-        }
-
-
-
-        [HttpPost]
-        public async Task<IActionResult> SubmitScore(ScoreEntry scoreEntry)
-        {
-            await _leaderboardProvider.SubmitScore(scoreEntry);
-            return Ok();
-        }
+    [HttpPost]
+    public async Task<IActionResult> SubmitScore(ScoreEntry scoreEntry)
+    {
+        await _leaderboardProvider.SubmitScoreAsync(scoreEntry);
+        return Ok();
     }
 }

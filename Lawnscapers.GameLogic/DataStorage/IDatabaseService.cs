@@ -1,9 +1,13 @@
-﻿namespace Lawnscapers.GameLogic.DataStorage
+﻿namespace Lawnscapers.DataStorage
 {
-    public interface IDatabaseService<T>
+    public interface IDatabaseService
     {
-        Task<IEnumerable<T>> GetData(string collectionName);
-        Task SubmitData(string collectionName, string key, T data);
-        Task DeleteData(string collectionName, string key);
+        Task<T> GetAsync<T>(string collectionName, string key, CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<T>> GetAllAsync<T>(string collectionName, CancellationToken cancellationToken = default);
+
+        Task SubmitAsync<T>(string collectionName, string key, T data, CancellationToken cancellationToken = default);
+
+        Task DeleteAsync(string collectionName, string key, CancellationToken cancellationToken = default);
     }
 }

@@ -10,8 +10,4 @@
     <PackageReference Include="Google.Cloud.Firestore" Version="3.9.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Lawnscapers.Models\Lawnscapers.Models.csproj" />
-  </ItemGroup>
-
 </Project>

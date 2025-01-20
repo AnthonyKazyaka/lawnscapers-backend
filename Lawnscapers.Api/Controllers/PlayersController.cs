@@ -1,24 +1,31 @@
-﻿using Lawnscapers.Models;
-using Lawnscapers.GameLogic.DataStorage;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Lawnscapers.Models;
+using Lawnscapers.Providers;
 
 namespace Lawnscapers.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PlayerController : ControllerBase
+    public class PlayersController : ControllerBase
     {
-        private readonly IRepository<Player> _playerRepository;
+        private readonly IPlayerProvider _playerProvider;
 
-        public PlayerController(IRepository<Player> playerRepository)
+        public PlayersController(IPlayerProvider playerProvider)
         {
-            _playerRepository = playerRepository;
+            _playerProvider = playerProvider;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
+        {
+            var players = await _playerProvider.GetAllPlayersAsync();
+            return Ok(players);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Player>> GetPlayer(Guid id)
         {
-            var player = await _playerRepository.GetByIdAsync(id);
+            var player = await _playerProvider.GetPlayerAsync(id);
             if (player == null)
             {
                 return NotFound($"Player with ID {id} not found.");
@@ -29,21 +36,21 @@ namespace Lawnscapers.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePlayer(Player player)
         {
-            await _playerRepository.AddAsync(player);
-            return CreatedAtAction(nameof(GetPlayer), new { id = player.Id }, player);
+            await _playerProvider.AddPlayerAsync(player);
+            return CreatedAtAction(nameof(GetPlayer), new { /*id = player.Id*/ }, player);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePlayer(Guid id, Player updatedPlayer)
         {
-            var existingPlayer = await _playerRepository.GetByIdAsync(id);
+            var existingPlayer = await _playerProvider.GetPlayerAsync(id);
             if (existingPlayer == null)
             {
                 return NotFound($"Player with ID {id} not found.");
             }
 
             updatedPlayer.Id = id;
-            await _playerRepository.UpdateAsync(updatedPlayer);
+            await _playerProvider.UpdatePlayerAsync(updatedPlayer);
 
             return NoContent();
         }
@@ -51,13 +58,13 @@ namespace Lawnscapers.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlayer(Guid id)
         {
-            var player = await _playerRepository.GetByIdAsync(id);
+            var player = await _playerProvider.GetPlayerAsync(id);
             if (player == null)
             {
                 return NotFound($"Player with ID {id} not found.");
             }
 
-            await _playerRepository.DeleteAsync(id);
+            await _playerProvider.DeletePlayerAsync(id);
             return NoContent();
         }
     }
