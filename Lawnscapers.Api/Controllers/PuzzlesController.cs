@@ -10,12 +10,12 @@ namespace Lawnscapers.Api.Controllers
     public class PuzzlesController : ControllerBase
     {
         private readonly IPuzzleProvider _puzzleProvider;
-        private readonly ILeaderboardProvider _leaderboardProvider;
+        private readonly IScoreProvider _scoreProvider;
 
-        public PuzzlesController(IPuzzleProvider puzzleProvider, ILeaderboardProvider leaderboardProvider)
+        public PuzzlesController(IPuzzleProvider puzzleProvider, IScoreProvider scoreProvider)
         {
             _puzzleProvider = puzzleProvider;
-            _leaderboardProvider = leaderboardProvider;
+            _scoreProvider = scoreProvider;
         }
 
         [HttpGet]
@@ -25,15 +25,6 @@ namespace Lawnscapers.Api.Controllers
 
             return Ok(puzzles);
         }
-
-        [HttpGet]
-        [Route("{puzzleId}/leaderboards")]
-        public async Task<ActionResult<IEnumerable<ScoreEntry>>> GetScoresByPuzzleId(Guid puzzleId)
-        {
-            var scores = await _leaderboardProvider.GetScoresByPuzzleIdAsync(puzzleId);
-            return Ok(scores);
-        }
-
 
         [HttpPost]
         [Route("create")]

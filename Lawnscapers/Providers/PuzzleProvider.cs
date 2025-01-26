@@ -1,4 +1,5 @@
 ﻿using Lawnscapers.DataStorage;
+using Lawnscapers.DataStorage.Firestore;
 using Lawnscapers.Enums;
 using FirestorePuzzle = Lawnscapers.DataStorage.Firestore.Models.Puzzle;
 using Puzzle = Lawnscapers.Models.Puzzle;
@@ -7,10 +8,10 @@ namespace Lawnscapers.Providers
 {
     public class PuzzleProvider : IPuzzleProvider
     {
-        private readonly IRepository<FirestorePuzzle> _puzzleRepository;
+        private readonly IPuzzleRepository _puzzleRepository;
         private readonly IDataMapper<FirestorePuzzle, Puzzle> _puzzleMapper;
 
-        public PuzzleProvider(IRepository<FirestorePuzzle> puzzleRepository, IDataMapper<FirestorePuzzle, Puzzle> puzzleMapper)
+        public PuzzleProvider(IPuzzleRepository puzzleRepository, IDataMapper<FirestorePuzzle, Puzzle> puzzleMapper)
         {
             _puzzleRepository = puzzleRepository;
             _puzzleMapper = puzzleMapper;
@@ -24,7 +25,7 @@ namespace Lawnscapers.Providers
 
         public async Task DeletePuzzleAsync(Guid puzzleId)
         {
-            await _puzzleRepository.DeleteAsync(puzzleId);
+            await _puzzleRepository.DeleteAsync(puzzleId.ToString());
         }
 
         public async Task<IDictionary<PuzzleType, IEnumerable<Puzzle>>> GetAllPuzzlesAsync()
@@ -42,7 +43,13 @@ namespace Lawnscapers.Providers
 
         public async Task<Puzzle> GetPuzzleAsync(Guid puzzleId)
         {
-            var firestorePuzzle = await _puzzleRepository.GetByIdAsync(puzzleId);
+            var firestorePuzzle = await _puzzleRepository.GetByIdAsync(puzzleId.ToString());
+
+            if (firestorePuzzle == null)
+            {
+                throw new ArgumentException($"Puzzle with id {puzzleId} not found.");
+            }
+
             return _puzzleMapper.Map(firestorePuzzle);
         }
 
@@ -56,8 +63,13 @@ namespace Lawnscapers.Providers
 
         public async Task UpdatePuzzleAsync(Puzzle puzzle)
         {
+            if(puzzle.Id == null)
+            {
+                throw new ArgumentNullException("Puzzle must have an id to be updated.");
+            }
+
             var firestorePuzzle = _puzzleMapper.Map(puzzle);
-            await _puzzleRepository.UpdateAsync(firestorePuzzle);
+            await _puzzleRepository.UpdateAsync(firestorePuzzle.Id!, firestorePuzzle);
         }
     }
 }

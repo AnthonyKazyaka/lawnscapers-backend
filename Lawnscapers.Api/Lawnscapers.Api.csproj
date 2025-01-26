@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lawnscapers.GameLogic\Lawnscapers.csproj" />
+    <ProjectReference Include="..\Lawnscapers\Lawnscapers.csproj" />
   </ItemGroup>
 
 </Project>

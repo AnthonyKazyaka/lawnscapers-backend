@@ -36,8 +36,8 @@ namespace Lawnscapers.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePlayer(Player player)
         {
-            await _playerProvider.AddPlayerAsync(player);
-            return CreatedAtAction(nameof(GetPlayer), new { /*id = player.Id*/ }, player);
+            await _playerProvider.CreatePlayerAsync(player);
+            return Ok(player);
         }
 
         [HttpPut("{id}")]
@@ -55,17 +55,17 @@ namespace Lawnscapers.Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePlayer(Guid id)
-        {
-            var player = await _playerProvider.GetPlayerAsync(id);
-            if (player == null)
-            {
-                return NotFound($"Player with ID {id} not found.");
-            }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeletePlayer(Guid id)
+        //{
+        //    var player = await _playerProvider.GetPlayerAsync(id);
+        //    if (player == null)
+        //    {
+        //        return NotFound($"Player with ID {id} not found.");
+        //    }
 
-            await _playerProvider.DeletePlayerAsync(id);
-            return NoContent();
-        }
+        //    await _playerProvider.DeletePlayerAsync(id);
+        //    return NoContent();
+        //}
     }
 }

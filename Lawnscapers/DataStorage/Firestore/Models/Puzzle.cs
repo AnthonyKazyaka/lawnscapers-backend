@@ -5,7 +5,7 @@ namespace Lawnscapers.DataStorage.Firestore.Models
     [FirestoreData]
     public class Puzzle
     {
-        [FirestoreProperty("id")]
+        [FirestoreDocumentId()]
         public string? Id { get; set; }
 
         [FirestoreProperty("name")]
@@ -24,12 +24,15 @@ namespace Lawnscapers.DataStorage.Firestore.Models
         public Position? PlayerStartPosition { get; set; }
 
         [FirestoreProperty("obstacles")]
-        public List<Obstacle> Obstacles { get; set; } = new List<Obstacle>();
+        public List<Obstacle> Obstacles { get; set; }
 
         [FirestoreProperty("createdAt")]
-        public string? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         [FirestoreProperty("puzzleType")]
         public string? PuzzleType { get; set; }
+
+        [FirestoreProperty("stats")]
+        public PuzzleStats Stats { get; set; } = new PuzzleStats();
     }
 }

@@ -3,9 +3,9 @@ namespace Lawnscapers.DataStorage.Firestore
 {
     public class PlayerMapper : IDataMapper<DataStorage.Firestore.Models.Player, Lawnscapers.Models.Player>
     {
-        private readonly IDataMapper<Models.ScoreEntry, Lawnscapers.Models.ScoreEntry> _scoreMapper;
+        private readonly IDataMapper<Models.Score, Lawnscapers.Models.Score> _scoreMapper;
 
-        public PlayerMapper(IDataMapper<DataStorage.Firestore.Models.ScoreEntry, Lawnscapers.Models.ScoreEntry> scoreMapper)
+        public PlayerMapper(IDataMapper<DataStorage.Firestore.Models.Score, Lawnscapers.Models.Score> scoreMapper)
         {
             _scoreMapper = scoreMapper;
         }

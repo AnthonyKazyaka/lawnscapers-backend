@@ -8,7 +8,7 @@ namespace Lawnscapers.Providers
         Task<Player> GetPlayerAsync(string username);
         Task<IEnumerable<Player>> GetAllPlayersAsync();
         Task<IEnumerable<Player>> GetAllPlayersByIds(IEnumerable<Guid> ids);
-        Task AddPlayerAsync(Player player);
+        Task<Guid> CreatePlayerAsync(Player player);
         Task UpdatePlayerAsync(Player player);
         Task DeletePlayerAsync(Guid playerId);
     }

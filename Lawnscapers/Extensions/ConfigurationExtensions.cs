@@ -21,9 +21,9 @@ namespace Lawnscapers.Extensions
         {
             serviceCollection.AddScoped<IDatabaseService, FirestoreDatabaseService>();
 
-            serviceCollection.AddScoped<IRepository<DataStorage.Firestore.Models.Puzzle>, PuzzleRepository>();
-            serviceCollection.AddScoped<IRepository<DataStorage.Firestore.Models.ScoreEntry>, ScoreRepository>();
-            serviceCollection.AddScoped<IRepository<DataStorage.Firestore.Models.Player>, PlayerRepository>();
+            serviceCollection.AddScoped<IPuzzleRepository, PuzzleRepository>();
+            serviceCollection.AddScoped<IScoreRepository, ScoreRepository>();
+            serviceCollection.AddScoped<IPlayerRepository, PlayerRepository>();
 
 
             return serviceCollection;
@@ -31,7 +31,7 @@ namespace Lawnscapers.Extensions
 
         public static IServiceCollection AddMapperDependencies(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IDataMapper<DataStorage.Firestore.Models.ScoreEntry, Models.ScoreEntry>, ScoreEntryMapper>();
+            serviceCollection.AddScoped<IDataMapper<DataStorage.Firestore.Models.Score, Models.Score>, ScoreMapper>();
             serviceCollection.AddScoped<IDataMapper<DataStorage.Firestore.Models.Puzzle, Models.Puzzle>, PuzzleMapper>();
             serviceCollection.AddScoped<IDataMapper<DataStorage.Firestore.Models.Player, Models.Player>, PlayerMapper>();
 
@@ -41,7 +41,7 @@ namespace Lawnscapers.Extensions
         public static IServiceCollection AddProviderDependencies(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IPuzzleProvider, PuzzleProvider>();
-            serviceCollection.AddScoped<ILeaderboardProvider, LeaderboardProvider>();
+            serviceCollection.AddScoped<IScoreProvider, ScoreProvider>();
             serviceCollection.AddScoped<IPlayerProvider, PlayerProvider>();
 
             return serviceCollection;

@@ -11,8 +11,8 @@
                 data.Width,
                 data.Height,
                 new Lawnscapers.Models.Position(data.PlayerStartPosition.X, data.PlayerStartPosition.Y),
-                data.Obstacles.Select(o => new Lawnscapers.Models.Obstacle(Enums.ObstacleType.Wall, new Lawnscapers.Models.Position(o.Position.X, o.Position.Y))).ToList(),
-                DateTime.FromFileTimeUtc(long.Parse(data.CreatedAt))
+                data.Obstacles?.Select(o => new Lawnscapers.Models.Obstacle(Enums.ObstacleType.Wall, new Lawnscapers.Models.Position(o.Position.X, o.Position.Y))).ToList() ?? new List<Lawnscapers.Models.Obstacle>(),
+                data.CreatedAt
             );
 
             return puzzle;
@@ -28,17 +28,8 @@
                 Width = data.Width,
                 Height = data.Height,
                 PlayerStartPosition = new DataStorage.Firestore.Models.Position { X = data.PlayerStartPosition.X, Y = data.PlayerStartPosition.Y },
-                Obstacles = data.Obstacles.Select(obstacle => new DataStorage.Firestore.Models.Obstacle { Type = obstacle.Type.ToString(), Position = new DataStorage.Firestore.Models.Position { X = obstacle.Position.X, Y = obstacle.Position.Y } }).ToList(),
-                CreatedAt = data.CreatedAt.ToFileTimeUtc().ToString(),
-                //Scores = data.ScoreEntries.Select(s => new DataStorage.Firestore.Models.ScoreEntry
-                //{
-                //    Id = s.Id.ToString(),
-                //    PlayerId = s.Player.Id.ToString(),
-                //    PlayerName = s.Player.Name,
-                //    Score = s.Score,
-                //    PuzzleId = s.PuzzleId.ToString(),
-                //    Timestamp = s.Timestamp
-                //}).ToList(),
+                Obstacles = data.Obstacles?.Select(obstacle => new DataStorage.Firestore.Models.Obstacle { Type = obstacle.Type.ToString(), Position = new DataStorage.Firestore.Models.Position { X = obstacle.Position.X, Y = obstacle.Position.Y } }).ToList() ?? new List<DataStorage.Firestore.Models.Obstacle>(),
+                CreatedAt = data.CreatedAt,
                 PuzzleType = data.PuzzleType.ToString()
             };
 

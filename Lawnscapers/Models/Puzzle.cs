@@ -12,7 +12,6 @@ namespace Lawnscapers.Models
         public Position PlayerStartPosition { get; set; }
         public List<Obstacle> Obstacles { get; set; } = new List<Obstacle>();
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public List<ScoreEntry> ScoreEntries { get; set; } = new List<ScoreEntry>();
         public PuzzleType PuzzleType { get; set; }
 
         public Puzzle(Guid id, string name, Player creator, int width, int height, Position playerStartPosition, List<Obstacle> obstacles, DateTime createdAt)
