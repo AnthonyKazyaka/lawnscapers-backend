@@ -16,15 +16,14 @@ namespace Lawnscapers.Providers
             _playerMapper = playerMapper;
         }
 
-        public async Task<Guid> CreatePlayerAsync(Player player)
+        public async Task<string> CreatePlayerAsync(Player player)
         {
-            player.Id = Guid.NewGuid();
             var firestorePlayer = _playerMapper.Map(player);
             await _playerRepository.AddAsync(firestorePlayer);
             return player.Id;
         }
 
-        public async Task DeletePlayerAsync(Guid playerId)
+        public async Task DeletePlayerAsync(string playerId)
         {
             await _playerRepository.DeleteAsync(playerId.ToString());
         }
@@ -35,7 +34,7 @@ namespace Lawnscapers.Providers
             return dbPlayer.Select(player => _playerMapper.Map(player));
         }
 
-        public async Task<Player> GetPlayerAsync(Guid playerId)
+        public async Task<Player> GetPlayerAsync(string playerId)
         {
             var dbPlayer = await _playerRepository.GetByIdAsync(playerId.ToString());
 
@@ -47,13 +46,13 @@ namespace Lawnscapers.Providers
             return _playerMapper.Map(dbPlayer);
         }
 
-        public async Task<IEnumerable<Player>> GetAllPlayersByIds(IEnumerable<Guid> ids)
+        public async Task<IEnumerable<Player>> GetAllPlayersByIds(IEnumerable<string> ids)
         {
             var allPlayers = await _playerRepository.GetAllAsync();
-            return allPlayers.Where(player => ids.Contains(Guid.Parse(player.Id))).Select(player => _playerMapper.Map(player));
+            return allPlayers.Where(player => ids.Contains(player.Id)).Select(player => _playerMapper.Map(player));
         }
 
-        public async Task<Player> GetPlayerAsync(string username)
+        public async Task<Player> GetPlayerByUsernameAsync(string username)
         {
             var allPlayers = await _playerRepository.GetAllAsync();
             var player = allPlayers.FirstOrDefault(p => p.Name == username);

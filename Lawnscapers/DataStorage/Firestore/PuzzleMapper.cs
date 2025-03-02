@@ -5,7 +5,7 @@
         public Lawnscapers.Models.Puzzle Map(DataStorage.Firestore.Models.Puzzle data)
         {
             var puzzle = new Lawnscapers.Models.Puzzle(
-                Guid.Parse(data.Id),
+                data.Id,
                 data.Name,
                 new Lawnscapers.Models.Player { Name = data.Creator },
                 data.Width,
@@ -20,6 +20,9 @@
 
         public DataStorage.Firestore.Models.Puzzle Map(Lawnscapers.Models.Puzzle data)
         {
+            DateTimeOffset createdAt = new DateTimeOffset(data.CreatedAt);
+            var createdAtUtc = createdAt.UtcDateTime;
+
             var puzzle = new DataStorage.Firestore.Models.Puzzle
             {
                 Id = data.Id.ToString(),
@@ -29,7 +32,7 @@
                 Height = data.Height,
                 PlayerStartPosition = new DataStorage.Firestore.Models.Position { X = data.PlayerStartPosition.X, Y = data.PlayerStartPosition.Y },
                 Obstacles = data.Obstacles?.Select(obstacle => new DataStorage.Firestore.Models.Obstacle { Type = obstacle.Type.ToString(), Position = new DataStorage.Firestore.Models.Position { X = obstacle.Position.X, Y = obstacle.Position.Y } }).ToList() ?? new List<DataStorage.Firestore.Models.Obstacle>(),
-                CreatedAt = data.CreatedAt,
+                CreatedAt = createdAtUtc,
                 PuzzleType = data.PuzzleType.ToString()
             };
 

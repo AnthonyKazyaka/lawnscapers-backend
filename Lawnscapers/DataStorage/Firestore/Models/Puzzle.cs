@@ -32,7 +32,7 @@ namespace Lawnscapers.DataStorage.Firestore.Models
         [FirestoreProperty("puzzleType")]
         public string? PuzzleType { get; set; }
 
-        [FirestoreProperty("stats")]
-        public PuzzleStats Stats { get; set; } = new PuzzleStats();
+        //[FirestoreProperty("stats")]
+        //public PuzzleStats Stats { get; set; } = new PuzzleStats();
     }
 }

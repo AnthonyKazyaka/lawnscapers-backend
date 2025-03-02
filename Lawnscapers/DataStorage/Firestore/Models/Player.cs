@@ -5,7 +5,7 @@ namespace Lawnscapers.DataStorage.Firestore.Models
     [FirestoreData]
     public class Player
     {
-        [FirestoreDocumentId]
+        [FirestoreProperty("id")]
         public string Id { get; set; } = string.Empty;
 
         [FirestoreProperty("name")]

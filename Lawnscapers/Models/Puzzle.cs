@@ -4,7 +4,7 @@ namespace Lawnscapers.Models
 {
     public class Puzzle
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; }
         public Player Creator { get; set; }
         public int Width { get; set; }
@@ -14,7 +14,7 @@ namespace Lawnscapers.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public PuzzleType PuzzleType { get; set; }
 
-        public Puzzle(Guid id, string name, Player creator, int width, int height, Position playerStartPosition, List<Obstacle> obstacles, DateTime createdAt)
+        public Puzzle(string id, string name, Player creator, int width, int height, Position playerStartPosition, List<Obstacle> obstacles, DateTime createdAt)
         {
             // Validate name is not null or empty
             if (string.IsNullOrWhiteSpace(name))

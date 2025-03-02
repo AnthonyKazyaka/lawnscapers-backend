@@ -24,7 +24,7 @@ namespace Lawnscapers.Extensions
             serviceCollection.AddScoped<IPuzzleRepository, PuzzleRepository>();
             serviceCollection.AddScoped<IScoreRepository, ScoreRepository>();
             serviceCollection.AddScoped<IPlayerRepository, PlayerRepository>();
-
+            serviceCollection.AddScoped<IFeedbackRepository, FeedbackRepository>();
 
             return serviceCollection;
         }
@@ -34,6 +34,7 @@ namespace Lawnscapers.Extensions
             serviceCollection.AddScoped<IDataMapper<DataStorage.Firestore.Models.Score, Models.Score>, ScoreMapper>();
             serviceCollection.AddScoped<IDataMapper<DataStorage.Firestore.Models.Puzzle, Models.Puzzle>, PuzzleMapper>();
             serviceCollection.AddScoped<IDataMapper<DataStorage.Firestore.Models.Player, Models.Player>, PlayerMapper>();
+            serviceCollection.AddScoped<IDataMapper<DataStorage.Firestore.Models.Feedback, Models.Feedback>, FeedbackMapper>();
 
             return serviceCollection;
         }
@@ -43,6 +44,7 @@ namespace Lawnscapers.Extensions
             serviceCollection.AddScoped<IPuzzleProvider, PuzzleProvider>();
             serviceCollection.AddScoped<IScoreProvider, ScoreProvider>();
             serviceCollection.AddScoped<IPlayerProvider, PlayerProvider>();
+            serviceCollection.AddScoped<IFeedbackProvider, FeedbackProvider>();
 
             return serviceCollection;
         }

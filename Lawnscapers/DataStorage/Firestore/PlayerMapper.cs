@@ -14,7 +14,7 @@ namespace Lawnscapers.DataStorage.Firestore
         {
             var player = new Lawnscapers.Models.Player
             {
-                Id = Guid.Parse(data.Id),
+                Id = data.Id,
                 Name = data.Name,
                 CreatedAt = data.CreatedAt
             };
@@ -24,11 +24,14 @@ namespace Lawnscapers.DataStorage.Firestore
 
         public DataStorage.Firestore.Models.Player Map(Lawnscapers.Models.Player data)
         {
+            DateTimeOffset createdAt = new DateTimeOffset(data.CreatedAt);
+            var createdAtUtc = createdAt.UtcDateTime;
+
             var player = new DataStorage.Firestore.Models.Player
             {
                 Id = data.Id.ToString(),
                 Name = data.Name,
-                CreatedAt = data.CreatedAt
+                CreatedAt = createdAtUtc
             };
 
             return player;

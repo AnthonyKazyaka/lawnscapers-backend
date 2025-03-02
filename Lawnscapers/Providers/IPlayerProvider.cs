@@ -4,12 +4,12 @@ namespace Lawnscapers.Providers
 {
     public interface IPlayerProvider
     {
-        Task<Player> GetPlayerAsync(Guid playerId);
-        Task<Player> GetPlayerAsync(string username);
+        Task<Player> GetPlayerAsync(string playerId);
+        Task<Player> GetPlayerByUsernameAsync(string username);
         Task<IEnumerable<Player>> GetAllPlayersAsync();
-        Task<IEnumerable<Player>> GetAllPlayersByIds(IEnumerable<Guid> ids);
-        Task<Guid> CreatePlayerAsync(Player player);
+        Task<IEnumerable<Player>> GetAllPlayersByIds(IEnumerable<string> ids);
+        Task<string> CreatePlayerAsync(Player player);
         Task UpdatePlayerAsync(Player player);
-        Task DeletePlayerAsync(Guid playerId);
+        Task DeletePlayerAsync(string playerId);
     }
 }

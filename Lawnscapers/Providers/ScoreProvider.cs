@@ -23,7 +23,7 @@ namespace Lawnscapers.Providers
             return scoreEntries;
         }
 
-        public async Task<IEnumerable<Score>> GetScoresByPuzzleIdAsync(Guid puzzleId)
+        public async Task<IEnumerable<Score>> GetScoresByPuzzleIdAsync(string puzzleId)
         {
             var puzzleScores = await _scoreRepository.GetScoresByPuzzleIdAsync(puzzleId.ToString());
             if (puzzleScores == null)
@@ -38,7 +38,7 @@ namespace Lawnscapers.Providers
             return filteredScores.Select(score => _scoreMapper.Map(score));
         }
 
-        public async Task<IEnumerable<Score>> GetScoresByPlayerIdAsync(Guid playerId)
+        public async Task<IEnumerable<Score>> GetScoresByPlayerIdAsync(string playerId)
         {
             var playerScores = await _scoreRepository.GetScoresByPlayerIdAsync(playerId.ToString());
             if (playerScores == null)

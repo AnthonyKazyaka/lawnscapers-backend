@@ -23,7 +23,7 @@ namespace Lawnscapers.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Player>> GetPlayer(Guid id)
+        public async Task<ActionResult<Player>> GetPlayer(string id)
         {
             var player = await _playerProvider.GetPlayerAsync(id);
             if (player == null)
@@ -41,7 +41,7 @@ namespace Lawnscapers.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePlayer(Guid id, Player updatedPlayer)
+        public async Task<IActionResult> UpdatePlayer(string id, Player updatedPlayer)
         {
             var existingPlayer = await _playerProvider.GetPlayerAsync(id);
             if (existingPlayer == null)

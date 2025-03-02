@@ -6,10 +6,10 @@
         {
             var score = new Lawnscapers.Models.Score(
                 data.Id,
-                Guid.Parse(data.PuzzleId),
+                data.PuzzleId,
                 new Lawnscapers.Models.Player
                 {
-                    Id = Guid.Parse(data.PlayerId)
+                    Id = data.PlayerId
                 },
                 data.Moves,
                 data.ScoreHash,
@@ -21,13 +21,15 @@
 
         public DataStorage.Firestore.Models.Score Map(Lawnscapers.Models.Score data)
         {
+            var utcTimestamp = new DateTimeOffset(data.Timestamp).UtcDateTime;
+
             var score = new DataStorage.Firestore.Models.Score
             {
                 Id = data.Id.ToString(),
                 PlayerId = data.Player.Id.ToString(),
                 Moves = data.Moves,
                 PuzzleId = data.PuzzleId.ToString(),
-                Timestamp = data.Timestamp,
+                Timestamp = utcTimestamp,
                 ScoreHash = ComputeScoreHash(
                     data.PuzzleId.ToString(), data.Moves, data.Timestamp)
             };
