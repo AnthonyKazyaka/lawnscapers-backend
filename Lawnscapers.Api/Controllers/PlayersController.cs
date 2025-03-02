@@ -18,54 +18,63 @@ namespace Lawnscapers.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
         {
-            var players = await _playerProvider.GetAllPlayersAsync();
-            return Ok(players);
+            try
+            {
+                return Ok(await _playerProvider.GetAllPlayersAsync());
+            }
+            catch (Exception)
+            {
+                return NotFound("No players found.");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Player>> GetPlayer(string id)
         {
-            var player = await _playerProvider.GetPlayerAsync(id);
-            if (player == null)
+            try
+            {
+                return Ok(await _playerProvider.GetPlayerAsync(id));
+            }
+            catch (Exception)
             {
                 return NotFound($"Player with ID {id} not found.");
             }
-            return Ok(player);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreatePlayer(Player player)
         {
-            await _playerProvider.CreatePlayerAsync(player);
-            return Ok(player);
+            try
+            {
+                return Ok(await _playerProvider.CreatePlayerAsync(player));
+            }
+            catch (Exception)
+            {
+                return BadRequest("Unable to create player.");
+            }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePlayer(string id, Player updatedPlayer)
+        [HttpPut]
+        public async Task<IActionResult> UpdatePlayer(Player updatedPlayer)
         {
-            var existingPlayer = await _playerProvider.GetPlayerAsync(id);
-            if (existingPlayer == null)
+            var id = updatedPlayer.Id;
+
+            try
+            {
+                await _playerProvider.UpdatePlayerAsync(updatedPlayer);
+                return Ok();
+            }
+            catch (Exception)
             {
                 return NotFound($"Player with ID {id} not found.");
             }
-
-            updatedPlayer.Id = id;
-            await _playerProvider.UpdatePlayerAsync(updatedPlayer);
-
-            return NoContent();
         }
 
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeletePlayer(Guid id)
-        //{
-        //    var player = await _playerProvider.GetPlayerAsync(id);
-        //    if (player == null)
-        //    {
-        //        return NotFound($"Player with ID {id} not found.");
-        //    }
-
-        //    await _playerProvider.DeletePlayerAsync(id);
-        //    return NoContent();
-        //}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePlayer(string id)
+        {
+            await _playerProvider.DeletePlayerAsync(id);
+            return NoContent();
+        }
     }
 }

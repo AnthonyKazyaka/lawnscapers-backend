@@ -24,13 +24,13 @@ namespace Lawnscapers.DataStorage.Firestore
 
         public async Task AddAsync(Puzzle entity, CancellationToken cancellationToken = default)
         {
-            await _db.Collection(CollectionName).AddAsync(entity, cancellationToken);
+            _ = await _db.Collection(CollectionName).AddAsync(entity, cancellationToken);
         }
 
         public async Task UpdateAsync(string id, Puzzle entity, CancellationToken cancellationToken = default)
         {
             var doc = _db.Collection(CollectionName).Document(id);
-            await doc.SetAsync(entity, SetOptions.MergeAll, cancellationToken);
+            _ = await doc.SetAsync(entity, SetOptions.MergeAll, cancellationToken);
         }
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)

@@ -21,6 +21,7 @@ namespace Lawnscapers.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IDictionary<string, IEnumerable<Puzzle>>>> GetPuzzles(int page = 1, int pageSize = 20)
         {
+
             var puzzles = await _puzzleProvider.GetAllPuzzlesAsync();
 
             return Ok(puzzles);

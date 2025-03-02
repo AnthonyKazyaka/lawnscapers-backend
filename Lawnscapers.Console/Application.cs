@@ -70,15 +70,15 @@ namespace Lawnscapers.Console
             //    await _puzzleProvider.AddPuzzleAsync(convertedPuzzle);
             //}
 
-            foreach (var score in deserializedData.Scores)
-            {
-                System.Console.WriteLine($"Inserting score {score.Id}");
+            //foreach (var score in deserializedData.Scores)
+            //{
+            //    System.Console.WriteLine($"Inserting score {score.Id}");
 
-                var player = deserializedData.Players.FirstOrDefault(p => p.Id == score.PlayerId);
-                var convertedScore = new Score(score.Id, score.PuzzleId, player, score.Moves, score.ScoreHash, score.Timestamp);
+            //    var player = deserializedData.Players.FirstOrDefault(p => p.Id == score.PlayerId);
+            //    var convertedScore = new Score(score.Id, score.PuzzleId, player, score.Moves, score.ScoreHash, score.Timestamp);
 
-                await _scoreProvider.SubmitScoreAsync(convertedScore);
-            }
+            //    await _scoreProvider.SubmitScoreAsync(convertedScore);
+            //}
 
             //foreach (var feedback in deserializedData.Feedback)
             //{
