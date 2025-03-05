@@ -13,5 +13,8 @@ namespace Lawnscapers.DataStorage.Firestore.Models
 
         [FirestoreProperty("createdAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [FirestoreProperty("updatedAt")]
+        public DateTime? UpdatedAt { get; set; }
     }
 }

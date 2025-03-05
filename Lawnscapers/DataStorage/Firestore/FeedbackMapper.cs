@@ -9,7 +9,8 @@
                 Id = data.Id,
                 PlayerId = data.PlayerId,
                 Context = data.Context,
-                Text = data.Text
+                Text = data.Text,
+                CreatedAt = data.CreatedAt
             };
         }
 
@@ -20,7 +21,8 @@
                 Id = data.Id,
                 PlayerId = data.PlayerId,
                 Context = data.Context,
-                Text = data.Text
+                Text = data.Text,
+                CreatedAt = data.CreatedAt
             };
         }
     }

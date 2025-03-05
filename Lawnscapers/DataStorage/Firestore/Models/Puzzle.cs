@@ -5,7 +5,7 @@ namespace Lawnscapers.DataStorage.Firestore.Models
     [FirestoreData]
     public class Puzzle
     {
-        [FirestoreDocumentId()]
+        [FirestoreDocumentId]
         public string? Id { get; set; }
 
         [FirestoreProperty("name")]

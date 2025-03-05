@@ -21,14 +21,14 @@ public class ScoresController : ControllerBase
     }
 
     [HttpGet("puzzles/{puzzleId}")]
-    public async Task<ActionResult<IEnumerable<Score>>> GetScores(Guid puzzleId)
+    public async Task<ActionResult<IEnumerable<Score>>> GetScores(string puzzleId)
     {
         var scores = await _scoreProvider.GetScoresByPuzzleIdAsync(puzzleId);
         return Ok(scores);
     }
 
     [HttpGet("players/{playerId}")]
-    public async Task<ActionResult<IEnumerable<Score>>> GetScoresByPlayer(Guid playerId)
+    public async Task<ActionResult<IEnumerable<Score>>> GetScoresByPlayer(string playerId)
     {
         var scores = await _scoreProvider.GetScoresByPlayerIdAsync(playerId);
         if (!scores.Any())

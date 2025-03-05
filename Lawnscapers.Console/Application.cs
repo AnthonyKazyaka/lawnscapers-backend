@@ -82,7 +82,10 @@ namespace Lawnscapers.Console
 
             //foreach (var feedback in deserializedData.Feedback)
             //{
-            //    System.Console.WriteLine($"Inserting feedback {feedback.Id}");
+            //    var feedbackEpoch = long.Parse(feedback.Id);
+            //    DateTimeOffset feedbackDate = DateTimeOffset.FromUnixTimeMilliseconds(feedbackEpoch);
+            //    System.Console.WriteLine($"Inserting feedback {feedback.Id} from {feedbackDate}");
+            //    feedback.CreatedAt = feedbackDate.UtcDateTime;
             //    await _feedbackProvider.SubmitFeedbackAsync(feedback);
             //}
         }
@@ -91,8 +94,8 @@ namespace Lawnscapers.Console
     public class ProcessedData
     {
         public List<Player> Players { get; set; } = new List<Player>();
-        public List<DbPuzzle> Puzzles { get; set; } = new List<DbPuzzle>();
-        public List<DbScore> Scores { get; set; } = new List<DbScore>();
-        public List<Feedback> Feedback { get; set; } = new List<Feedback>();
+        //public List<DbPuzzle> Puzzles { get; set; } = new List<DbPuzzle>();
+        //public List<DbScore> Scores { get; set; } = new List<DbScore>();
+        //public List<Feedback> Feedback { get; set; } = new List<Feedback>();
     }
 }
